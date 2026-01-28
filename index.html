@@ -1,0 +1,361 @@
+import React, { useState, useEffect } from 'react';
+
+export default function App() {
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [view, setView] = useState('selection'); // 'selection', 'username', 'user_found', 'syncing', 'done'
+  const [progress, setProgress] = useState(0);
+  const [username, setUsername] = useState('');
+
+  const items = [
+    {
+      id: 1,
+      name: "Rebirth",
+      image: "https://i.ibb.co/mCXtD9fw/image.png",
+      rarity: "legendary"
+    },
+    {
+      id: 2,
+      name: "Trenostruzzo Turbo 4000",
+      image: "https://static.wikia.nocookie.net/ukradite-breinrot/images/f/ff/TrenostruzzoTurbo4000.webp/revision/latest?cb=20250907013810&path-prefix=ru",
+      rarity: "epic"
+    },
+    {
+      id: 3,
+      name: "Trippi Troppi Troppa Trippa",
+      image: "https://static.wikia.nocookie.net/stealabr/images/a/a6/Trippi_Troppi_Troppa_Trippa.png/revision/latest?cb=20250902182246",
+      rarity: "common"
+    },
+    {
+      id: 4,
+      name: "Pakrahmatmamat",
+      image: "https://static.wikia.nocookie.net/ukradite-breinrot/images/9/95/Pakrahmamat.webp/revision/latest?cb=20250831183228&path-prefix=ru",
+      rarity: "rare"
+    },
+    {
+      id: 5,
+      name: "Los Tralaleritos",
+      image: "https://static.wikia.nocookie.net/ukradite-breinrot/images/f/fc/LosTralaleritos.png/revision/latest/thumbnail/width/360/height/450?cb=20251128161844&path-prefix=ru",
+      rarity: "common"
+    },
+    {
+      id: 6,
+      name: "Job Job Job Sahur",
+      image: "https://tr.rbxcdn.com/180DAY-69dc73536275fb9709d6499c215247d7/420/420/BackAccessory/Webp/noFilter",
+      rarity: "epic"
+    },
+    {
+      id: 7,
+      name: "Chicleteira Bicicleteira",
+      image: "https://static.wikia.nocookie.net/ukradite-breinrot/images/5/5a/Chicleteira.png/revision/latest?cb=20250924172721&path-prefix=ru",
+      rarity: "rare"
+    },
+    {
+      id: 8,
+      name: "Extinct Matteo",
+      image: "https://static.wikia.nocookie.net/ukradite-breinrot/images/a/a2/ExtinctMatteo.png/revision/latest?cb=20250919195626&path-prefix=ru",
+      rarity: "legendary"
+    },
+    {
+      id: 9,
+      name: "Meowl",
+      image: "https://static.wikia.nocookie.net/ukradite-breinrot/images/9/92/Meowl2.png/revision/latest?cb=20251101092901&path-prefix=ru",
+      rarity: "common"
+    },
+    {
+      id: 10,
+      name: "Admin Lucky Block",
+      image: "https://tr.rbxcdn.com/180DAY-99132d9054de9d99a77b94cabac8523c/420/420/Hat/Webp/noFilter",
+      rarity: "admin"
+    }
+  ];
+
+  const toggleSelection = (id) => {
+    if (selectedItems.includes(id)) {
+      setSelectedItems(selectedItems.filter(itemId => itemId !== id));
+    } else {
+      setSelectedItems([...selectedItems, id]);
+    }
+  };
+
+  const startFlow = () => {
+    setView('username');
+  };
+
+  const handleSearch = (e) => {
+      e.preventDefault();
+      if (!username) return;
+      // Simulate search delay
+      setTimeout(() => {
+          setView('user_found');
+      }, 800);
+  };
+
+  const handleClaim = () => {
+    setView('syncing');
+    // Simulate syncing progress
+    let currentProgress = 0;
+    const interval = setInterval(() => {
+        currentProgress += Math.random() * 15;
+        if (currentProgress >= 100) {
+            currentProgress = 100;
+            clearInterval(interval);
+            setTimeout(() => setView('done'), 500);
+        }
+        setProgress(currentProgress);
+    }, 200);
+  };
+
+  const reset = () => {
+      setSelectedItems([]);
+      setView('selection');
+      setProgress(0);
+      setUsername('');
+  }
+
+  // SVG Icons
+  const CheckIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+  );
+
+  const RefreshIcon = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+          <path d="M21 3v5h-5" />
+          <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+          <path d="M8 16H3v5" />
+      </svg>
+  );
+
+  const UserIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="currentColor" className="text-gray-400">
+        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+    </svg>
+  );
+
+  return (
+    <div className="min-h-screen bg-gray-900 flex justify-center items-center font-sans overflow-hidden">
+      {/* Mobile Container */}
+      <div className="relative w-full max-w-md h-[100dvh] bg-black overflow-hidden shadow-2xl flex flex-col">
+        
+        {/* Background */}
+        <div 
+          className="absolute inset-0 z-0 bg-cover bg-center"
+          style={{ 
+            backgroundImage: `url('https://wallpaper.forfun.com/fetch/ec/ec4be6368e40c55e6a76083ff4140223.jpeg')` 
+          }}
+        >
+          <div className="absolute inset-0 bg-yellow-500/10 backdrop-blur-[1px]"></div>
+        </div>
+
+        {/* --- View: Selection --- */}
+        {view === 'selection' && (
+            <>
+                {/* Header */}
+                <div className="relative z-10 pt-8 pb-4 text-center">
+                <h1 className="text-4xl font-black text-white uppercase tracking-tighter drop-shadow-[0_4px_0_rgba(0,0,0,0.5)]"
+                    style={{ textShadow: '3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000' }}>
+                    STEAL A<br/>BRAINROT
+                </h1>
+                </div>
+
+                {/* Grid */}
+                <div className="relative z-10 flex-1 overflow-y-auto px-4 pb-24 scrollbar-hide">
+                <div className="grid grid-cols-2 gap-4">
+                    {items.map((item) => {
+                    const isSelected = selectedItems.includes(item.id);
+                    
+                    return (
+                        <div 
+                        key={item.id}
+                        onClick={() => toggleSelection(item.id)}
+                        className={`
+                            relative group cursor-pointer transition-all duration-200 transform
+                            ${isSelected ? 'scale-95' : 'hover:scale-105'}
+                        `}
+                        >
+                        {/* Card */}
+                        <div className={`
+                            aspect-[4/5] rounded-xl overflow-hidden flex flex-col items-center justify-between p-2
+                            bg-white/20 backdrop-blur-sm border-4 transition-colors duration-300
+                            ${isSelected ? 'border-green-500 bg-green-500/20' : 'border-white/50 hover:border-white'}
+                        `}>
+                            
+                            {/* Image */}
+                            <div className="w-full h-3/5 flex items-center justify-center relative">
+                                {isSelected && (
+                                    <div className="absolute inset-0 bg-green-400/30 blur-xl rounded-full"></div>
+                                )}
+                                <img 
+                                    src={item.image} 
+                                    alt={item.name}
+                                    className="w-full h-full object-contain drop-shadow-lg z-10"
+                                    onError={(e) => {
+                                        e.target.style.display='none';
+                                        e.target.parentElement.innerHTML = '<div class="text-white text-xs text-center">No Image</div>'
+                                    }}
+                                />
+                            </div>
+
+                            {/* Name */}
+                            <div className="w-full text-center mt-1 z-10">
+                                <p className="text-white font-bold text-sm leading-tight drop-shadow-md line-clamp-2 min-h-[2.5em] flex items-center justify-center break-words">
+                                    {item.name}
+                                </p>
+                            </div>
+
+                            {/* Status Button */}
+                            <div className={`
+                                w-full mt-2 py-1.5 rounded-lg font-black text-xs uppercase tracking-wider text-center shadow-lg transition-all
+                                ${isSelected 
+                                    ? 'bg-green-500 text-white shadow-green-500/50' 
+                                    : 'bg-blue-600 text-white shadow-blue-600/50 group-hover:bg-blue-500'}
+                            `}>
+                                {isSelected ? (
+                                    <span className="flex items-center justify-center gap-1">
+                                        <CheckIcon /> SELECTED
+                                    </span>
+                                ) : (
+                                    'SELECT'
+                                )}
+                            </div>
+
+                        </div>
+                        </div>
+                    );
+                    })}
+                </div>
+                </div>
+
+                {/* Footer */}
+                <div className="relative z-20 bg-blue-500/90 backdrop-blur-md border-t-4 border-blue-300 p-4 pb-8 flex items-center justify-between shadow-[0_-5px_20px_rgba(0,0,0,0.3)]">
+                    <div className="flex flex-col">
+                        <span className="text-blue-100 text-xs font-bold uppercase tracking-widest">SELECT:</span>
+                        <span className="text-white text-3xl font-black drop-shadow-md">
+                        {selectedItems.length}
+                        </span>
+                    </div>
+
+                    <button 
+                        className="bg-white text-blue-600 px-8 py-3 rounded-2xl font-black text-xl uppercase shadow-[0_4px_0_rgb(200,200,200)] active:shadow-none active:translate-y-[4px] transition-all hover:bg-gray-50"
+                        onClick={startFlow}
+                    >
+                        CONTINUE
+                    </button>
+                </div>
+            </>
+        )}
+
+        {/* --- View: Username Input --- */}
+        {view === 'username' && (
+            <div className="absolute inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
+                <div className="bg-white/95 w-full rounded-3xl p-6 shadow-2xl animate-in zoom-in-95 duration-200">
+                    <h2 className="text-2xl font-black text-gray-800 mb-1 text-center">Find your account</h2>
+                    <p className="text-gray-500 text-center mb-6 text-sm font-bold">Enter your Roblox username</p>
+                    
+                    <form onSubmit={handleSearch}>
+                        <input 
+                            type="text" 
+                            placeholder="Username..." 
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            className="w-full bg-gray-200 border-2 border-transparent focus:border-blue-500 rounded-xl px-4 py-3 font-bold text-lg mb-4 outline-none transition-colors"
+                            autoFocus
+                        />
+                        <button 
+                            type="submit"
+                            className="w-full bg-blue-500 text-white font-black text-lg py-3 rounded-xl shadow-[0_4px_0_rgb(30,64,175)] active:shadow-none active:translate-y-[4px] transition-all uppercase"
+                        >
+                            Search
+                        </button>
+                    </form>
+                </div>
+            </div>
+        )}
+
+        {/* --- View: User Found --- */}
+        {view === 'user_found' && (
+             <div className="absolute inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
+                <div className="bg-white/95 w-full rounded-3xl p-6 shadow-2xl flex flex-col items-center animate-in zoom-in-95 duration-200">
+                    <h2 className="text-2xl font-black text-gray-800 mb-6 text-center">User Found</h2>
+                    
+                    <div className="w-24 h-24 bg-gray-200 rounded-full mb-4 flex items-center justify-center overflow-hidden border-4 border-gray-100 shadow-inner">
+                        <UserIcon />
+                    </div>
+                    
+                    <div className="text-center mb-8">
+                        <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">Username:</p>
+                        <p className="text-xl font-black text-gray-800">{username}</p>
+                    </div>
+
+                    <button 
+                        onClick={handleClaim}
+                        className="w-full bg-green-500 text-white font-black text-lg py-3 rounded-xl shadow-[0_4px_0_rgb(21,128,61)] active:shadow-none active:translate-y-[4px] transition-all uppercase"
+                    >
+                        Claim for this user
+                    </button>
+                </div>
+            </div>
+        )}
+
+        {/* --- View: Syncing --- */}
+        {view === 'syncing' && (
+             <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-md flex flex-col items-center justify-center p-8 text-center animate-in fade-in duration-300">
+                <h2 className="text-2xl font-black text-white mb-6 uppercase drop-shadow-lg">
+                    Syncing items with<br/>Your account...
+                </h2>
+                
+                {/* Progress Bar */}
+                <div className="w-full h-6 bg-gray-700 rounded-full overflow-hidden border-2 border-white/20 relative">
+                    <div 
+                        className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-200"
+                        style={{ width: `${progress}%` }}
+                    ></div>
+                </div>
+                <p className="text-white font-mono mt-2 font-bold">{Math.round(progress)}%</p>
+                <p className="text-white/50 text-xs mt-4">Do not close this app...</p>
+
+                {/* Selected Items Preview */}
+                <div className="mt-8 flex gap-2 justify-center flex-wrap opacity-50">
+                    {items.filter(i => selectedItems.includes(i.id)).slice(0, 3).map(item => (
+                        <div key={item.id} className="w-12 h-12 bg-white/10 rounded-lg p-1">
+                             <img src={item.image} className="w-full h-full object-contain" alt="" />
+                        </div>
+                    ))}
+                    {selectedItems.length > 3 && (
+                        <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center text-white font-bold">
+                            +{selectedItems.length - 3}
+                        </div>
+                    )}
+                </div>
+             </div>
+        )}
+
+        {/* --- View: Done --- */}
+        {view === 'done' && (
+            <div className="absolute inset-0 z-50 bg-blue-600 flex flex-col items-center justify-center p-8 text-center animate-in zoom-in-95 duration-300">
+                 <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mb-6 shadow-2xl ring-8 ring-blue-500/50">
+                    <div className="text-blue-600 transform scale-150">
+                        <CheckIcon />
+                    </div>
+                 </div>
+                 <h2 className="text-3xl font-black text-white mb-2 uppercase drop-shadow-md">
+                    Sync Complete!
+                </h2>
+                <p className="text-blue-100 text-lg font-bold mb-8">
+                    You stole {selectedItems.length} brainrots for {username}.
+                </p>
+                <button 
+                    onClick={reset}
+                    className="flex items-center gap-2 bg-white text-blue-700 px-6 py-3 rounded-xl font-black text-lg uppercase shadow-lg hover:bg-gray-100 transition-colors"
+                >
+                    <RefreshIcon /> Play Again
+                </button>
+            </div>
+        )}
+
+      </div>
+    </div>
+  );
+}
